@@ -81,6 +81,11 @@ module.exports = class IQDriver extends Homey.Driver {
             this.api = await Enphase(this.username, this.password);
             await this.api.setEndpoint(settings.address, settings.id);
             this.setInterval(INTERVAL);
+            // Update the settings in all the other devices
+            const devices = this.getDevices();
+            for (let i = 0; i < devices.length; i++) {
+                devices[i].setSettings(settings);
+            }
         }
         await this.update();
     }
