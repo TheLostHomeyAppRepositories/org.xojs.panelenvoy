@@ -8,10 +8,10 @@
     "local"
   ],
   "name": {
-    "en": "PanelEnvoy"
+    "en": "Microinverters"
   },
   "description": {
-    "en": "Adds support for MyBrand devices."
+    "en": "Monitor individual Enphase microinverters."
   },
   "category": [
     "energy"
@@ -25,6 +25,11 @@
   "author": {
     "name": "Tim Wilkinson",
     "email": "tim.wilkinson@me.com"
+  },
+  "homeyCommunityTopicId": 131689,
+  "source": "https://github.com/aanon4/org.xojs.panelenvoy",
+  "bugs": {
+    "url": "https://github.com/aanon4/org.xojs.panelenvoy/issues"
   },
   "drivers": [
     {
