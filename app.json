@@ -11,7 +11,7 @@
     "en": "Microinverters"
   },
   "description": {
-    "en": "Monitor individual Enphase microinverters."
+    "en": "Monitor individual Enphase microinverters to get the best out of your solar system."
   },
   "category": [
     "energy"
@@ -73,7 +73,37 @@
         "large": "/drivers/iq/assets/images/large.png",
         "xlarge": "/drivers/iq/assets/images/xlarge.png"
       },
-      "id": "iq"
+      "id": "iq",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Enphase Credentials"
+          },
+          "children": [
+            {
+              "id": "username",
+              "type": "text",
+              "label": {
+                "en": "Username"
+              },
+              "hint": {
+                "en": "Username"
+              }
+            },
+            {
+              "id": "password",
+              "type": "password",
+              "label": {
+                "en": "Password"
+              },
+              "hint": {
+                "en": "Password"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "discovery": {
