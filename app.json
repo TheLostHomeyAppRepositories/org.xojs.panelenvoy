@@ -18,10 +18,11 @@
   ],
   "permissions": [],
   "images": {
-    "small": "/assets/images/small.png",
-    "large": "/assets/images/large.png",
-    "xlarge": "/assets/images/xlarge.png"
+    "small": "/assets/images/small.jpg",
+    "large": "/assets/images/large.jpg",
+    "xlarge": "/assets/images/xlarge.jpg"
   },
+  "brandColor": "#F37422",
   "author": {
     "name": "Tim Wilkinson",
     "email": "tim.wilkinson@me.com"
