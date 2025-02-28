@@ -23,7 +23,7 @@ module.exports = class IQDriver extends Homey.Driver {
         let api;
         session.setHandler("login", async (data) => {
             try {
-                const api = await Enphase(data.username, data.password);
+                await Enphase(data.username, data.password);
                 username = data.username;
                 password = data.password;
                 this.log("Auth success");
@@ -41,7 +41,7 @@ module.exports = class IQDriver extends Homey.Driver {
             for (let i = 0; i < values.length; i++) {
                 const v = values[i];
                 const api = await Enphase(username, password, v.address, v.id);
-                const inverters = await api.getInverterInventory();
+                const inverters = await api.getInverters();
                 inverters.forEach(inv => {
                     devices.push({
                         name: `IQ ${inv.serialNumber}`,
