@@ -40,14 +40,13 @@ module.exports = class IQDriver extends Homey.Driver {
             const devices = [];
             for (let i = 0; i < values.length; i++) {
                 const v = values[i];
-                const api = await Enphase(username, password);
-                await api.setEndpoint(v.address, v.id);
-                const inverters = await api.getInverters();
-                inverters.forEach(serialnr => {
+                const api = await Enphase(username, password, v.address, v.id);
+                const inverters = await api.getInverterInventory();
+                inverters.forEach(inv => {
                     devices.push({
-                        name: `IQ ${serialnr}`,
+                        name: `IQ ${inv.serialNumber}`,
                         data: {
-                            serialnr: serialnr
+                            serialnr: inv.serialNumber
                         },
                         settings: {
                             username: username,
@@ -78,8 +77,7 @@ module.exports = class IQDriver extends Homey.Driver {
             this.password = settings.password;
             this.setInterval();
             this.log('IQDriver has started api');
-            this.api = await Enphase(this.username, this.password);
-            await this.api.setEndpoint(settings.address, settings.id);
+            this.api = await Enphase(this.username, this.password, settings.address, settings.id);
             this.setInterval(INTERVAL);
             // Update the settings in all the other devices
             const devices = this.getDevices();
