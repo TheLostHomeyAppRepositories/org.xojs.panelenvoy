@@ -1,34 +1,34 @@
 {
-    "id": "org.xojs.panelenvoy",
-    "version": "1.0.4",
-    "compatibility": ">=5.0.0",
-    "sdk": 3,
-    "platforms": [
-        "local"
-    ],
-    "name": {
-        "en": "Enverter Insight"
-    },
-    "description": {
-        "en": "Monitor individual Enphase microinverters to get the best out of your solar system."
-    },
-    "category": [
-        "energy"
-    ],
-    "permissions": [],
-    "images": {
-        "small": "/assets/images/small.jpg",
-        "large": "/assets/images/large.jpg",
-        "xlarge": "/assets/images/xlarge.jpg"
-    },
-    "brandColor": "#F37422",
-    "author": {
-        "name": "Tim Wilkinson",
-        "email": "tim.wilkinson@me.com"
-    },
-    "homeyCommunityTopicId": 131689,
-    "source": "https://github.com/aanon4/org.xojs.panelenvoy",
-    "bugs": {
-        "url": "https://github.com/aanon4/org.xojs.panelenvoy/issues"
-    }
+  "id": "org.xojs.panelenvoy",
+  "version": "1.0.5",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Enverter Insight"
+  },
+  "description": {
+    "en": "Monitor individual Enphase microinverters to get the best out of your solar system."
+  },
+  "category": [
+    "energy"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.jpg",
+    "large": "/assets/images/large.jpg",
+    "xlarge": "/assets/images/xlarge.jpg"
+  },
+  "brandColor": "#F37422",
+  "author": {
+    "name": "Tim Wilkinson",
+    "email": "tim.wilkinson@me.com"
+  },
+  "homeyCommunityTopicId": 131689,
+  "source": "https://github.com/aanon4/org.xojs.panelenvoy",
+  "bugs": {
+    "url": "https://github.com/aanon4/org.xojs.panelenvoy/issues"
+  }
 }
