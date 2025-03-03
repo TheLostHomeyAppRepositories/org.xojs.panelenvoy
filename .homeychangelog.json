@@ -22,5 +22,8 @@
   },
   "1.0.7": {
     "en": "Fix authentication exception"
+  },
+  "1.0.8": {
+    "en": "Simplify shared credentials"
   }
 }
