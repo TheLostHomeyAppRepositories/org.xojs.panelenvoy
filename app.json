@@ -73,37 +73,7 @@
         "large": "/drivers/iq/assets/images/large.png",
         "xlarge": "/drivers/iq/assets/images/xlarge.png"
       },
-      "id": "iq",
-      "settings": [
-        {
-          "type": "group",
-          "label": {
-            "en": "Enphase Credentials"
-          },
-          "children": [
-            {
-              "id": "username",
-              "type": "text",
-              "label": {
-                "en": "Username"
-              },
-              "hint": {
-                "en": "Username"
-              }
-            },
-            {
-              "id": "password",
-              "type": "password",
-              "label": {
-                "en": "Password"
-              },
-              "hint": {
-                "en": "Password"
-              }
-            }
-          ]
-        }
-      ]
+      "id": "iq"
     }
   ],
   "discovery": {

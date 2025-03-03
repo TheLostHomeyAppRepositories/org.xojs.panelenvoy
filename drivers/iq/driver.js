@@ -13,8 +13,6 @@ module.exports = class IQDriver extends Homey.Driver {
     async onInit() {
         this.log('IQDriver has been initialized');
         this.api = null;
-        this.username = null;
-        this.password = null;
     }
 
     async onPair(session) {
@@ -58,7 +56,8 @@ module.exports = class IQDriver extends Homey.Driver {
                         });
                     });
                 }
-                catch (_) {
+                catch (e) {
+                    this.log(e);
                 }
             }
             return devices;
@@ -68,34 +67,25 @@ module.exports = class IQDriver extends Homey.Driver {
     setInterval(interval) {
         this.homey.clearInterval(this.interval);
         if (interval) {
-            this.interval = this.homey.setInterval(() => this.update(), interval);
+            this.interval = this.homey.setInterval(() => this.update().catch(this.error), interval);
         }
     }
 
     async deviceStarted(device) {
         this.log('IQDriver has deviceStarted');
         const settings = device.getSettings();
-        if (this.username != settings.username || this.password != settings.password) {
-            this.api = null;
-            this.username = settings.username;
-            this.password = settings.password;
-            this.setInterval();
-            this.log('IQDriver has started api');
+        if (!this.api) {
             try {
-                this.api = await Enphase(this.username, this.password, settings.address, settings.id);
+                this.log('IQDriver has started api');
+                this.api = await Enphase(settings.username, settings.password, settings.address, settings.id);
                 this.setInterval(INTERVAL);
-                // Update the settings in all the other devices
-                const devices = this.getDevices();
-                for (let i = 0; i < devices.length; i++) {
-                    devices[i].setSettings(settings);
-                }
             }
             catch (e) {
                 this.log(e);
                 return false;
             }
         }
-        await this.update();
+        this.update().catch(this.log);
     }
 
     async deviceStopped(device) {
