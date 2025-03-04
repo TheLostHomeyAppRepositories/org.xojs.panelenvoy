@@ -93,6 +93,7 @@ module.exports = class IQDriver extends Homey.Driver {
         const devices = this.getDevices();
         if (!devices.length) {
             this.setInterval();
+            this.api = null;
         }
     }
 
