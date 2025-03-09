@@ -53,4 +53,19 @@ module.exports = class IQDevice extends Homey.Device {
     this.setAvailable().catch(this.error);
   }
 
+  async onDiscoveryAddressChanged(discoveryResult) {
+    await this.setSettings({ address: discoveryResult.address });
+    this.driver.reconnect(discoveryResult.address);
+  }
+
+  async onDiscoveryAvailable(discoveryResult) {
+    await this.setSettings({ address: discoveryResult.address });
+    this.driver.reconnect(discoveryResult.address);
+  }
+
+  async onDiscoveryLastSeenChanged(discoveryResult) {
+    await this.setSettings({ address: discoveryResult.address });
+    this.driver.reconnect(discoveryResult.address);
+  }
+
 };

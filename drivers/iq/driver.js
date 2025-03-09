@@ -13,6 +13,7 @@ module.exports = class IQDriver extends Homey.Driver {
     async onInit() {
         this.log('IQDriver has been initialized');
         this.api = null;
+        this.starting = false;
     }
 
     async onPair(session) {
@@ -74,15 +75,19 @@ module.exports = class IQDriver extends Homey.Driver {
     async deviceStarted(device) {
         this.log('IQDriver has deviceStarted');
         const settings = device.getSettings();
-        if (!this.api) {
+        if (!this.api && !this.starting) {
             try {
                 this.log('IQDriver has started api');
+                this.starting = true;
                 this.api = await Enphase(settings.username, settings.password, settings.address, settings.id);
                 this.setInterval(INTERVAL);
             }
             catch (e) {
                 this.log(e);
                 return false;
+            }
+            finally {
+                this.starting = false;
             }
         }
         this.update().catch(this.log);
@@ -95,6 +100,25 @@ module.exports = class IQDriver extends Homey.Driver {
             this.setInterval();
             this.api = null;
         }
+    }
+
+    async reconnect(address) {
+        this.log(`IQDriver reconnect ${address}`);
+        if (this.api && this.api.endpoint != address) {
+            try {
+                this.starting = true;
+                this.api = await Enphase(this.api.username, this.api.password, address, this.api.serial);
+                await this.update();
+            }
+            catch (e) {
+                this.log(e);
+                return false;
+            }
+            finally {
+                this.starting = false;
+            }
+        }
+        return true;
     }
 
     async update() {
