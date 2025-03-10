@@ -12,8 +12,22 @@ module.exports = class IQDriver extends Homey.Driver {
      */
     async onInit() {
         this.log('IQDriver has been initialized');
-        this.api = null;
         this.starting = false;
+        const strategy = this.homey.discovery.getStrategy("enphase-envoy");
+        this.discoveries = strategy.getDiscoveryResults();
+        for (let k in this.discoveries) {
+            const discovery = this.discoveries[k];
+            discovery.on("addressChanged", changes => {
+                this.log(`IQDriver address changed`);
+                discovery.address = changes.address;
+                if (discovery.api && discovery.api.endpoint != changes.address) {
+                    discovery.api = null;
+                    this.getDevices().forEach(device => {
+                        this.deviceStarted(device).catch(this.log);
+                    });
+                }
+            });
+        }
     }
 
     async onPair(session) {
@@ -75,19 +89,17 @@ module.exports = class IQDriver extends Homey.Driver {
     async deviceStarted(device) {
         this.log('IQDriver has deviceStarted');
         const settings = device.getSettings();
-        if (!this.api && !this.starting) {
+        const discovery = this.discoveries[settings.id];
+        if (!discovery.api) {
             try {
-                this.log('IQDriver has started api');
-                this.starting = true;
-                this.api = await Enphase(settings.username, settings.password, settings.address, settings.id);
+                discovery.api = true;
+                discovery.api = await Enphase(settings.username, settings.password, this.discoveries[settings.id].address, settings.id);
                 this.setInterval(INTERVAL);
             }
             catch (e) {
+                discovery.api = null;
                 this.log(e);
-                return false;
-            }
-            finally {
-                this.starting = false;
+                return;
             }
         }
         this.update().catch(this.log);
@@ -98,42 +110,28 @@ module.exports = class IQDriver extends Homey.Driver {
         const devices = this.getDevices();
         if (!devices.length) {
             this.setInterval();
-            this.api = null;
-        }
-    }
-
-    async reconnect(address) {
-        this.log(`IQDriver reconnect ${address}`);
-        if (this.api && this.api.endpoint != address) {
-            try {
-                this.starting = true;
-                this.api = await Enphase(this.api.username, this.api.password, address, this.api.serial);
-                await this.update();
-            }
-            catch (e) {
-                this.log(e);
-                return false;
-            }
-            finally {
-                this.starting = false;
+            for (let id in this.discoveries) {
+                this.discoveries[id].api = null;
             }
         }
-        return true;
     }
 
     async update() {
         this.log("IQDriver update");
+        const mapping = {};
+        for (let k in this.discoveries) {
+            const api = this.discoveries[k].api;
+            if (api && api !== true) {
+                this.log("IQDriver calling getInverterProduction");
+                const production = await api.getInverterProduction();
+                production.forEach(p => mapping[p.serialNumber] = p.lastReportWatts);
+            }
+        }
         const devices = this.getDevices();
-        if (this.api && devices.length) {
-            this.log("IQDriver calling getInverterProduction");
-            const production = await this.api.getInverterProduction();
-            const mapping = {};
-            production.forEach(p => mapping[p.serialNumber] = p.lastReportWatts);
-            for (let i = 0; i < devices.length; i++) {
-                const p = mapping[devices[i].getData().serialnr];
-                if (typeof(p) === "number") {
-                    devices[i].updateProduction(p).catch(this.error);
-                }
+        for (let i = 0; i < devices.length; i++) {
+            const p = mapping[devices[i].getData().serialnr];
+            if (typeof(p) === "number") {
+                devices[i].updateProduction(p).catch(this.error);
             }
         }
     }
