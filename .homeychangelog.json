@@ -37,5 +37,8 @@
   },
   "1.0.12": {
     "en": "Fix crash"
+  },
+  "1.0.13": {
+    "en": "Support newly discovered Envoys"
   }
 }
