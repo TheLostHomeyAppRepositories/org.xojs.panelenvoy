@@ -35,6 +35,9 @@ module.exports = class IQDriver extends Homey.Driver {
                     }
                 });
             }
+            this.getDevices().forEach(device => {
+                this.deviceStarted(device).catch(this.log);
+            });
         };
         strategy.on("result", () => {
             updateDiscoveries();
