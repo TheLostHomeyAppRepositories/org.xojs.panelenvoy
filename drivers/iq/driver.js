@@ -90,7 +90,7 @@ module.exports = class IQDriver extends Homey.Driver {
         this.log('IQDriver has deviceStarted');
         const settings = device.getSettings();
         const discovery = this.discoveries[settings.id];
-        if (!discovery.api) {
+        if (discovery && !discovery.api) {
             try {
                 discovery.api = true;
                 discovery.api = await Enphase(settings.username, settings.password, this.discoveries[settings.id].address, settings.id);
