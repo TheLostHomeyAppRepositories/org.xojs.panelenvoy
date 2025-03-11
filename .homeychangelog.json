@@ -34,5 +34,8 @@
   },
   "1.0.11": {
     "en": "New mdns address management approach"
+  },
+  "1.0.12": {
+    "en": "Fix crash"
   }
 }
