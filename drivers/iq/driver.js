@@ -14,20 +14,32 @@ module.exports = class IQDriver extends Homey.Driver {
         this.log('IQDriver has been initialized');
         this.starting = false;
         const strategy = this.homey.discovery.getStrategy("enphase-envoy");
-        this.discoveries = strategy.getDiscoveryResults();
-        for (let k in this.discoveries) {
-            const discovery = this.discoveries[k];
-            discovery.on("addressChanged", changes => {
-                this.log(`IQDriver address changed`);
-                discovery.address = changes.address;
-                if (discovery.api && discovery.api.endpoint != changes.address) {
-                    discovery.api = null;
-                    this.getDevices().forEach(device => {
-                        this.deviceStarted(device).catch(this.log);
-                    });
+        const updateDiscoveries = () => {
+            this.log('IQDriver updateDiscoveries');
+            if (this.discoveries) {
+                for (let k in this.discoveries) {
+                    this.discoveries[k].off("addressChanged");
                 }
-            });
-        }
+            }
+            this.discoveries = strategy.getDiscoveryResults();
+            for (let k in this.discoveries) {
+                const discovery = this.discoveries[k];
+                discovery.on("addressChanged", changes => {
+                    this.log(`IQDriver address changed`);
+                    discovery.address = changes.address;
+                    if (discovery.api && discovery.api.endpoint != changes.address) {
+                        discovery.api = null;
+                        this.getDevices().forEach(device => {
+                            this.deviceStarted(device).catch(this.log);
+                        });
+                    }
+                });
+            }
+        };
+        strategy.on("result", () => {
+            updateDiscoveries();
+        });
+        updateDiscoveries();
     }
 
     async onPair(session) {
