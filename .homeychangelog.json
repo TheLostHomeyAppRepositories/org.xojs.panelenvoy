@@ -40,5 +40,8 @@
   },
   "1.0.13": {
     "en": "Support newly discovered Envoys"
+  },
+  "1.0.14": {
+    "en": "Handle device restart on new Envoy discovery"
   }
 }
