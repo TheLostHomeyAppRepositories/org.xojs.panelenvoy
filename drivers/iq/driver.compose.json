@@ -4,6 +4,7 @@
     },
     "class": "solarpanel",
     "capabilities": [
+        "meter_power",
         "measure_power"
     ],
     "platforms": [
