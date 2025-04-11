@@ -55,6 +55,10 @@ module.exports = class IQDevice extends Homey.Device {
     }
 
     async updateProduction(watts) {
+        // Fake a change to keep the Energy tab happy
+        if (this.getCapabilityValue("measure_power") == watts) {
+            this.setCapabilityValue("measure_power", watts + 1).catch(this.error);
+        }
         this.setCapabilityValue("measure_power", watts).catch(this.error);
         // Updated every minute, so we can calculate the meter value
         const meter = this.getStoreValue("my_meter_power") + watts / (60 * 1000);
