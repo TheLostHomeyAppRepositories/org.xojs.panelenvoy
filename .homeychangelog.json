@@ -46,5 +46,8 @@
   },
   "1.1.0": {
     "en": "Add meters for Energy Tab"
+  },
+  "1.1.1": {
+    "en": "Tweak the way we report watts to make the energy tab happy."
   }
 }
